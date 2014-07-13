@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+
+function ensure_config_file_exists() {
+    CONFIG_PATH=/etc/prosody/prosody.cfg.lua
+    DEFAULT_CONFIG="$CONFIG_PATH.default"
+    LINK_TARGET=$(readlink "$CONFIG_PATH")
+    if [ ! -e "$LINK_TARGET" ]; then
+        mkdir $(dirname "$LINK_TARGET")
+        cp "$DEFAULT_CONFIG" "$LINK_TARGET"
+    fi
+}
+
+
+function run_prosody() {
+    /usr/bin/sudo -u prosody /usr/bin/prosody
+}
+
+
+function main() {
+    ensure_config_file_exists
+    run_prosody
+}
+
+
+main

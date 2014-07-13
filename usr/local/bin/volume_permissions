@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# chown -R apache:apache /var/lib/prosody
+# chmod 0750             /var/www/prosody
+
+# wait for SIGINT OR SIGTERM
+# TODO(jistr): remove this when we use supervisor >= 3.0
+FIFO=/tmp/volume_permissions_wait
+mkfifo "$FIFO"
+trap 'echo INT caught; kill $(jobs -p); rm $FIFO' INT
+trap 'echo TERM caught; kill $(jobs -p); rm $FIFO' TERM
+read < "$FIFO" &
+wait
