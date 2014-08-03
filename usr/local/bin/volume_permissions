@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# chown -R apache:apache /var/lib/prosody
-# chmod 0750             /var/www/prosody
+chown -R prosody: /var/lib/prosody
+chmod 0750        /var/www/prosody
 
 # wait for SIGINT OR SIGTERM
 # TODO(jistr): remove this when we use supervisor >= 3.0
