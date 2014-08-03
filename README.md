@@ -28,13 +28,25 @@ Run
         -v /var/lib/prosody:/var/lib/prosody
         dockingbay/centos-prosody:latest
 
-* Connect to Prosody admin console on localhost to manage the server
-  (create users etc.).
+* Config file in the volume on the host machine was generated
+  (`/var/lib/prosody/conf/prosody.cfg.lua`). Change the domain name in
+  the config file to yours, specify paths to TLS key/cert to use.
 
-    telnet localhost 5582
+* Restart the container so that config changes take effect.
 
-  See [Prosody admin console docs](http://prosody.im/doc/console) for
-  usage info.
+    docker restart <container-id>
+
+* Create a user.
+
+    docker run --rm -i -t -v /var/lib/prosody:/var/lib/prosody \
+        dockingbay/centos-prosody:latest \
+        prosodyctl adduser username@example.com
+
+  or if are ok with specifying password on the command line:
+
+    docker run --rm -i -t -v /var/lib/prosody:/var/lib/prosody \
+        dockingbay/centos-prosody:latest \
+        prosodyctl register username example.com password
 
 * Open firewall ports 5222 and 5269 on the host.
 
