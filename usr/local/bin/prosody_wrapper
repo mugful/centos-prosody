@@ -8,21 +8,16 @@ function ensure_config_file_exists() {
     DEFAULT_CONFIG="$CONFIG_PATH.default"
     LINK_TARGET=$(readlink "$CONFIG_PATH")
     if [ ! -e "$LINK_TARGET" ]; then
-        mkdir $(dirname "$LINK_TARGET")
+        mkdir $(dirname "$LINK_TARGET") || true
         cp "$DEFAULT_CONFIG" "$LINK_TARGET"
     fi
 }
 
-
-function run_prosody() {
-    /usr/bin/sudo -u prosody /usr/bin/prosody
+function ensure_volume_permissions() {
+    chown -R prosody: /var/lib/prosody
+    chmod 0750        /var/lib/prosody
 }
 
-
-function main() {
-    ensure_config_file_exists
-    run_prosody
-}
-
-
-main
+ensure_volume_permissions
+ensure_config_file_exists
+exec su prosody -s /bin/bash -c /usr/bin/prosody

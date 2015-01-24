@@ -16,37 +16,34 @@ Run
 
 * Prepare a place for Prosody volume on the host machine.
 
-    mkdir -p /var/lib/prosody
+        mkdir -p /var/lib/prosody
 
 * Label the directories to make SELinux happy.
 
-    chcon -R system_u:object_r:svirt_sandbox_file_t:s0 /var/lib/prosody
+        chcon -Rt svirt_sandbox_file_t /var/lib/prosody
 
 * Run Prosody docker container.
 
-    docker run -p :5222 -p :5269 -p 127.0.0.1::5582 \
-        -v /var/lib/prosody:/var/lib/prosody
-        dockingbay/centos-prosody:latest
+        docker run --name myprosody -p 5222:5222 -p 5269:5269 \
+            -v /var/lib/prosody:/var/lib/prosody \
+            dockingbay/centos-prosody:latest
 
-* Config file in the volume on the host machine was generated
-  (`/var/lib/prosody/conf/prosody.cfg.lua`). Change the domain name in
-  the config file to yours, specify paths to TLS key/cert to use.
+* Config file in the volume on the host machine has been generated
+  (`/var/lib/prosody/conf/prosody.cfg.lua`) on the container's first
+  launch. Change the domain name in the config file to yours, specify
+  paths to TLS key/cert to use. On production systems you'll probaby
+  want to pre-create that file using your favorite configuration
+  management tool.
 
-* Restart the container so that config changes take effect.
+* Reload the config file in case you made changes to it.
 
-    docker restart <container-id>
+        docker exec -i -t myprosody prosodyctl reload
 
 * Create a user.
 
-    docker run --rm -i -t -v /var/lib/prosody:/var/lib/prosody \
-        dockingbay/centos-prosody:latest \
-        prosodyctl adduser username@example.com
+        docker exec -i -t myprosody prosodyctl adduser
 
-  or if are ok with specifying password on the command line:
-
-    docker run --rm -i -t -v /var/lib/prosody:/var/lib/prosody \
-        dockingbay/centos-prosody:latest \
-        prosodyctl register username example.com password
+  You will be prompted for details.
 
 * Open firewall ports 5222 and 5269 on the host.
 
