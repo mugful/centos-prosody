@@ -6,7 +6,7 @@ set -euxo pipefail
 yum -y reinstall glibc-common
 
 yum -y install epel-release
-curl -o /etc/yum.repos.d/ntrrgc-prosody-epel-7.repo https://copr.fedoraproject.org/coprs/ntrrgc/prosody/repo/epel-7/ntrrgc-prosody-epel-7.repo
+curl -o /etc/yum.repos.d/robert-prosody-0.9-epel-7.repo https://copr.fedoraproject.org/coprs/robert/prosody-0.9/repo/epel-7/robert-prosody-0.9-epel-7.repo
 
 yum -y install gcc lua-devel make prosody tar wget zlib-devel
 
@@ -22,8 +22,6 @@ make linux
 make install
 popd
 popd
-# remove deps for lua-zlib building
-yum -y remove cpp gcc lua-devel make tar wget zlib-devel
 
 mv /etc/prosody/prosody.cfg.lua /etc/prosody/prosody.cfg.lua.rpm_orig
 ln -s /var/lib/prosody/conf/prosody.cfg.lua /etc/prosody/prosody.cfg.lua
