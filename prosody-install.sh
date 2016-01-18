@@ -6,7 +6,6 @@ set -euxo pipefail
 yum -y reinstall glibc-common
 
 yum -y install epel-release
-curl -o /etc/yum.repos.d/robert-prosody-0.9-epel-7.repo https://copr.fedoraproject.org/coprs/robert/prosody-0.9/repo/epel-7/robert-prosody-0.9-epel-7.repo
 
 yum -y install gcc lua-devel make prosody tar wget zlib-devel
 
