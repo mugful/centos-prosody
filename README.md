@@ -1,3 +1,9 @@
+Not maintained
+==============
+
+This image is no longer used by the author, and is no longer maintained.
+
+
 centos-prosody
 ==============
 
